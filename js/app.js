@@ -1,7 +1,6 @@
 // console.log('wired up!')
 console.log($);
 var appSelector = document.querySelector("#app-container")
-// var proSearchSelector = document.querySelector('.prof-search')
 console.log('wired up!');
 
  var forEach = function(arr, cb){
@@ -12,26 +11,34 @@ console.log('wired up!');
 
 
 
-  // var columnLeft = function(pageObj){
     var columnLeft =  function (profileColumn){
       $.getJSON("https://api.github.com/users/chaselden?" + myApiSecret)
          .then(function(returnData){
-              console.log(returnData);
-               var pageObj = returnData
+
+              var pageObj = returnData
               var profileColumn = document.querySelector(".profile-col")
-              console.log('columnLeft')
+
               var columnStrL = ''
-                columnStrL +=       '<img src="'+ pageObj.avatar_url +'" class= "avatar rounded-2" alt=""/>'
-                columnStrL +=       '<h1>' + pageObj.name + '</h1>'
-                columnStrL +=       '<h3>' + pageObj.company + '</h3>'
-                columnStrL +=       '<h3>' + pageObj.blog + '</h3>'
-                columnStrL +=       '<h3>' + pageObj.location + '</h3>'
-                columnStrL +=       '<h3>' + pageObj.email + '/h3>'
-                columnStrL +=       '<h3>' + pageObj.bio + '/h3>'
 
-                profileColumn.innerHTML = columnStrL
+               columnStrL +=       '<img class="media-object" src="' + returnData.avatar_url + '" alt="...">'
+               columnStrL +=       '</div>'
+               columnStrL +=       '<div class="user-info">'
+               columnStrL +=       '<h1>' + returnData.name + '</h1>'
+               columnStrL +=       '<h2>' + returnData.login + '</h2>'
+               columnStrL +=       '<p>' + returnData.bio + '</p>'
+               columnStrL +=       '<p>' + returnData.blog + "</p>"
+               columnStrL +=       '</div>'
+               columnStrL +=       '<div> <button type="button" class="btn btn-primary">Follow</button> </div>'
+               columnStrL +=       '<a href="#"> Block or Report User</a>'
+               columnStrL +=       '<hr>'
+               columnStrL +=       '<p>' + returnData.company + "</p>"
+               columnStrL +=       '<p>' + '<i class="fa fa-map-marker" aria-hidden="true"></i>'+ ' ' + returnData.location + "</p>"
+               columnStrL +=       '<p>' + '<i class="fa fa-envelope-o" aria-hidden="true"></i>' + ' ' + '<a href="#">'+ returnData.email + '</a>' + "</p>"
+               columnStrL +=       '<p>' + '<i class="fa fa-link" aria-hidden="true"></i>' + ' ' + '<a href="#">' + returnData.blog + '</a>'+ "</p>"
+               columnStrL +=       '<p>' + '<i class="fa fa-clock-o" aria-hidden="true"></i>' + ' ' +returnData.created_at + "</p>"
 
-                // console.log()
+               profileColumn.innerHTML = columnStrL
+
       })
    }
 
@@ -47,25 +54,17 @@ console.log('wired up!');
          var repoArr = returnData
          forEach(repoArr, function(repoObj) {
           //  console.log(repoObj);
-          var columnStrR =    '<li>' + repoObj.name + '</li>'
-          //  console.log(repoInfoEl);
-          repoInfoEl.innerHTML += columnStrR
+          var repoStr =    '<ul>' + repoObj.name + '</ul>'
+          repoStr +=     '<hr>'
+          repoInfoEl.innerHTML += repoStr
 
        })
    })
 }
+var searchButton = document.querySelector('button')
+var inputBox = document.querySelector('input')
 
-// var columnLeft =  function (profileColumn){
-//   $.getJSON("https:/api.github.com/users/chaselden" + profileColumn + "?" + myApiSecret)
-//        .then(columnLeft)
-
-// }
-// var columnRight =  function (repoArr){
-//   $.getJSON("https:/api.github.com/users/" + '/repos' + "?" +  myApiSecret).then(columnRight)
-//
-// }
-
-var controlRouter = function(){
+var controlRouter = function(evt){
    var currentProfile = window.location.hash.slice(1)
 
    if(currentProfile.length === 0){
@@ -81,5 +80,5 @@ var controlRouter = function(){
 
 
 // controlRouter()
-window.addEventListener('hashchange', controlRouter)
 controlRouter()
+window.addEventListener('hashchange', controlRouter)
